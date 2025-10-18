@@ -29,7 +29,6 @@ COPY --from=builder /root/.local /root/.local
 
 # Copy application files
 COPY *.py .
-COPY meta_prompt.txt .
 
 # Create directories for data
 RUN mkdir -p /app/data /app/output /app/logs
