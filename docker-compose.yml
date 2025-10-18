@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  content-to-training-data:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: content-to-training-data
+    env_file:
+      - .env
+      
+    volumes:
+      # Mount directories for data, output, and logs
+      - ./data:/app/data
+      - ./output:/app/output
+      - ./logs:/app/logs
+      # Optional: Mount custom meta prompt
+      # - ./meta_prompt.txt:/app/meta_prompt.txt:ro

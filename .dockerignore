@@ -1,0 +1,107 @@
+# Docker build context ignore file
+# Excludes unnecessary files from Docker image
+
+# Environment variables - NEVER include in image
+.env
+.env.*
+
+# Python cache and build artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyc
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Virtual environments - not needed in container
+venv/
+env/
+.venv
+ENV/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Git repository - not needed in image
+.git/
+.gitignore
+.gitattributes
+
+# Documentation - keep only essential ones
+*.md
+!README.md
+!DOCKER.md
+!DOCKER_QUICKSTART.md
+
+# Jupyter notebooks
+.ipynb_checkpoints/
+*.ipynb
+
+# Output and log files - these are volume-mounted
+*.jsonl
+*.log
+*.db
+*.sqlite3
+
+# Keep requirements files
+!requirements.txt
+!requirements_minimal.txt
+
+# Data directory contents - folders created by Dockerfile, content is volume-mounted
+data/*
+!data/.gitkeep
+output/*
+!output/.gitkeep
+logs/*
+!logs/.gitkeep
+
+# Specific data folders with existing content
+blackdesert naeu/
+foundry_links/
+garmoth/
+
+# CI/CD configuration
+.github/
+.gitlab-ci.yml
+.circleci/
+
+# Testing files
+test/
+tests/
+*_test.py
+test_*.py
+
+# Temporary and backup files
+*.tmp
+*.bak
+*.backup
+*~.nib
+
+# OS-specific files
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Development and debug files
+jsonl_formatter.py
+debug.py
+scratch.py
+
+# Docker override files (keep base docker-compose.yml)
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+
+# Misc
+*.orig

@@ -1,0 +1,56 @@
+# Environment variables
+.env
+.env.local
+.venv
+venv/
+env/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Testing & Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Output files (keep examples in repo)
+*.db
+*.sqlite3
+*.log
+*.jsonl
+*.txt
+!requirements.txt
+!requirements_minimal.txt
+
+# Example/documentation files to keep
+!.env.example
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Documentation
+site/
+*.md
+!README.md
+!ARCHITECTURE.md
+!bug_report.md
+!feature_request.md
+
+# Custom tools
+jsonl_formatter.py
