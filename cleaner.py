@@ -35,14 +35,40 @@ def clean_playblackdesert(content: str) -> str:
     title = match.group("title")
     body = content[match.end():]
     
-    # Remove footer disclaimer
-    end_marker = (
-        "_* The content of the game guide may differ from the actual game content, "
-        "depending on the update and content changes."
-    )
-    end_idx = body.find(end_marker)
-    if end_idx != -1:
-        body = body[:end_idx]
+    # Remove footer disclaimer and common bottom blocks: "Request Edit", social links,
+    # copy/share blocks, and policy/terms link blocks. Playblackdesert often places these
+    # as a cluster of short lines; match a block starting at a known marker (Request Edit,
+    # Close Request to Update, Send Request to Update, or repeated social/link lines)
+    footer_patterns = [
+        # explicit site footer disclaimer present on many pages
+        r'(?ims)^_*The content of the game guide may differ from the actual game content.*$',
+        r'(?ims)^###\s*Request Edit\b.*$',
+        r'(?ims)^Close Request to Update\b.*$',
+        r'(?ims)^Send Request to Update\b.*$',
+        # social/share/copy url cluster (matches lines containing Share, Copy URL, Facebook, X, Instagram, etc.)
+        r'(?ims)(?:^\s*(?:Share|Copy URL|Facebook|Instagram|Twitch|Twitter|Youtube|Discord|TikTok).*$\n?){2,}',
+        # long policy/links footer starting with '[' (many consecutive link items)
+        r'(?ims)(?:^\[.*?\]\(https?:.*?\).*$\n?){3,}',
+        # PEGI image/footer marker
+        r'(?ims)^\[!\[Image.*?PEGI.*?\]\(.*?\)\].*$'
+    ]
+
+    # Remove all matched footer-like blocks wherever they appear
+    for fp in footer_patterns:
+        body = re.sub(fp, '', body)
+
+    # Defensive: if any footer marker still exists, cut everything from the earliest marker onward
+    cut_idx = None
+    for fp in footer_patterns:
+        m = re.search(fp, body)
+        if m:
+            if cut_idx is None or m.start() < cut_idx:
+                cut_idx = m.start()
+    if cut_idx is not None:
+        body = body[:cut_idx]
+
+    # Normalize excessive blank lines produced by removals
+    body = re.sub(r'\n{3,}', '\n\n', body)
     
     body = body.strip()
     return f"### {title}\n\n{body}"

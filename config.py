@@ -206,11 +206,13 @@ class PathConfig:
         PATHS_PROCESSED_LINKS_FILE: Processed links tracker (default: './official/processed_links.txt')
         PATHS_OUTPUT_FILENAME: Output JSONL file (default: 'bdo_official_guides.jsonl')
         PATHS_SHORT_CHUNKS_LOG: Short chunks log file (default: './short_chunks.log')
+        PATHS_CPT_OUTPUT_FILENAME: Raw CPT output file (default: './outputs/cpt_raw_data.txt')
     """
     markdown_filename: str = None
     processed_links_file: str = None
     output_filename: str = None
     short_chunks_log: str = None
+    cpt_output_filename: str = None
     
     def __post_init__(self):
         """Load from environment variables."""
@@ -222,6 +224,8 @@ class PathConfig:
             self.output_filename = _get_env_str("PATHS_OUTPUT_FILENAME", "./outputs/bdo_official_guides.jsonl")
         if self.short_chunks_log is None:
             self.short_chunks_log = _get_env_str("PATHS_SHORT_CHUNKS_LOG", "./outputs/short_chunks.log")
+        if self.cpt_output_filename is None:
+            self.cpt_output_filename = _get_env_str("PATHS_CPT_OUTPUT_FILENAME", "./outputs/cpt_raw_data.txt")
 
 
 @dataclass
@@ -417,6 +421,7 @@ class AppConfig:
         APP_TARGET_URL: Single URL to process (default: official BDO wiki)
         APP_DEBUG_MODE: Enable verbose logging (default: false)
         APP_BATCH_MODE: Process URLs from file vs single URL (default: true)
+        APP_CPT_RAW_MODE: Enable CPT raw text export instead of LLM generation (default: false)
         GOOGLE_API_KEY: Google Generative AI API key (REQUIRED)
     
     All nested configurations (scraper, generation, etc.) also support
@@ -425,6 +430,7 @@ class AppConfig:
     target_url: str = None
     debug_mode: bool = None
     batch_mode: bool = None
+    cpt_raw_mode: bool = None
     
     scraper: ScraperConfig = None
     generation: GenerationConfig = None
@@ -442,6 +448,8 @@ class AppConfig:
             self.debug_mode = _get_env_bool("APP_DEBUG_MODE", False)
         if self.batch_mode is None:
             self.batch_mode = _get_env_bool("APP_BATCH_MODE", True)
+        if self.cpt_raw_mode is None:
+            self.cpt_raw_mode = _get_env_bool("APP_CPT_RAW_MODE", False)
         
         if not self.batch_mode and not self.target_url:
             raise ValueError("APP_TARGET_URL must be set when APP_BATCH_MODE is false.")

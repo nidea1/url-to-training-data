@@ -40,7 +40,8 @@ class WebScraper:
         try:
             if "blackdesertfoundry.com" in url:
                 return self._scrape_with_urltomarkdown(url)
-            elif "garmoth.com" in url:
+            elif any(domain in url for domain in ["garmoth.com", "playblackdesert.com"]):
+            # elif "garmoth.com" in url:
                 return self._scrape_with_tomarkdown(url)
             else:
                 return self._scrape_with_jina(url)
